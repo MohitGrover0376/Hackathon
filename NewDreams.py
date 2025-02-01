@@ -1,6 +1,5 @@
 import requests
 import fetchCID
-from dream_analyzer import DreamAnalyzer
 import json
 from datetime import datetime
 

@@ -24,11 +24,13 @@ def main():
 
         # Fetch dream texts from Lighthouse using the CIDs
         fetched_dreams = {cid: fetch_dream_text(cid) for cid in dream_cids}
-
+        dreamstext = []
         # Print all fetched dream texts
         for cid, text in fetched_dreams.items():
+            dreamstext.append(text)
             print(f"\nCID: {cid}")
             print(f"Dream Text: {text}\n")
+        print(dreamstext)
     else:
         print("No dreams found or error occurred")
 
