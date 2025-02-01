@@ -1,27 +1,37 @@
-// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.19;
+// SPDX-License-Identifier: MIT 
+pragma solidity ^0.8.0;
 
-contract DreamLog {
-    struct DreamEntry {
-        string dreamText;
+contract DreamChain {
+    struct Dream {
+        address dreamer;
+        string ipfsHash;
         uint256 timestamp;
     }
 
-    mapping(address => DreamEntry[]) private userDreams;
+    Dream[] public dreams;
+    mapping(address => uint256[]) public userDreams;
 
-    event DreamLogged(address indexed user, string dreamText, uint256 timestamp);
+    event DreamLogged(address indexed dreamer, string ipfsHash, uint256 timestamp);
 
-    function logDream(string memory _dreamText) public {
-        require(bytes(_dreamText).length > 0, "Dream text cannot be empty");
-        userDreams[msg.sender].push(DreamEntry(_dreamText, block.timestamp));
-        emit DreamLogged(msg.sender, _dreamText, block.timestamp);
+    function submitDream(string memory _ipfsHash) public {
+        dreams.push(Dream(msg.sender, _ipfsHash, block.timestamp));
+        userDreams[msg.sender].push(dreams.length - 1);
+        emit DreamLogged(msg.sender, _ipfsHash, block.timestamp);
     }
 
-    function getMyDreams() public view returns (DreamEntry[] memory) {
-        return userDreams[msg.sender];
+    function getDreamsByUser(address user) public view returns (Dream[] memory) {
+        uint256 count = userDreams[user].length;
+        Dream[] memory userDreamList = new Dream[](count);
+
+        for (uint256 i = 0; i < count; i++) {
+            userDreamList[i] = dreams[userDreams[user][i]];
+        }
+
+        return userDreamList;
     }
 
-    function getDreamCount(address user) public view returns (uint256) {
-        return userDreams[user].length;
+    function getAllDreams() public view returns (Dream[] memory) {
+        return dreams;
     }
 }
+

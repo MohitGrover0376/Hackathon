@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "@lighthouse-web3/sdk": "^0.3.7",
+    "node-fetch": "^3.3.2"
+  }
+}
